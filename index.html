@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTC Notary — Dispatch Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:        #0D1A2E;
+  --navy-mid:    #152540;
+  --navy-light:  #1e3560;
+  --gold:        #C9A84C;
+  --gold-light:  #dfc070;
+  --gold-dark:   #9a7c30;
+  --gold-pale:   #f0e4c0;
+  --cream:       #F5F0E8;
+  --cream-dark:  #EDE5D8;
+  --cream-border:#D8CFBE;
+  --white:       #FFFFFF;
+  --text-navy:   #0D1A2E;
+  --text-mid:    #3a4f6a;
+  --text-muted:  #7a8fa8;
+  --success:     #1d6b3a;
+  --success-bg:  #e8f5ee;
+  --success-bd:  #a8d4b8;
+  --danger:      #8b1f1f;
+  --danger-bg:   #faeaea;
+  --danger-bd:   #e0a8a8;
+  --warn-bg:     #fdf6e4;
+  --warn-bd:     #e8d48a;
+  --warn-text:   #7a5c10;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--cream);
+  color: var(--text-navy);
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--navy);
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 2px solid var(--gold-dark);
+}
+
+.header-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  gap: 16px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-circle {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(201,168,76,0.08);
+}
+
+.brand-stack { line-height: 1.1; }
+.brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 1.5px;
+  display: block;
+}
+.brand-tagline {
+  font-family: 'Lato', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(201,168,76,0.55);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  display: block;
+}
+
+.header-right { display: flex; align-items: center; gap: 14px; }
+
+.notary-badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 4px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.live-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  padding: 6px 13px;
+  color: rgba(255,255,255,0.55);
+  font-size: 11px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.refresh-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.spin-ring {
+  width: 11px; height: 11px;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+}
+.refresh-btn.spinning .spin-ring { animation: spin 0.7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── NOTICE BAR ── */
+.notice-bar {
+  background: var(--navy-mid);
+  border-bottom: 1px solid rgba(201,168,76,0.18);
+  padding: 9px 24px;
+}
+.notice-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.notice-item {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(201,168,76,0.7);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.n-dot { color: var(--gold); font-size: 8px; }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  max-width: 1140px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 32px 24px 64px;
+}
+
+/* ── STATS ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-top: 3px solid var(--gold);
+  border-radius: 6px;
+  padding: 14px 18px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1;
+  display: block;
+  margin-bottom: 5px;
+}
+.stat-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── FILTERS ── */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-right: 4px;
+}
+.filter-btn {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 4px;
+  padding: 6px 16px;
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.filter-btn:hover { border-color: var(--gold-dark); color: var(--text-navy); }
+.filter-btn.active { background: var(--navy); border-color: var(--navy); color: var(--gold); }
+
+/* ── SECTION DIVIDER ── */
+.section-div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 32px 0 16px;
+}
+.section-div:first-child { margin-top: 0; }
+.div-line { flex: 1; height: 1px; background: var(--cream-border); }
+.div-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── JOB CARDS ── */
+.job-stack { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+
+.job-card {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.15s;
+  position: relative;
+}
+.job-card:hover { box-shadow: 0 4px 20px rgba(13,26,46,0.1); transform: translateY(-1px); }
+.job-card.s-claimed { background: var(--success-bg); border-color: var(--success-bd); }
+.job-card.s-passed  { border-color: var(--cream-border); opacity: 0.58; }
+
+.card-stripe {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+}
+.st-pending { background: var(--gold); }
+.st-claimed { background: var(--success); }
+.st-passed  { background: var(--cream-border); }
+
+/* CARD HEAD */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px 12px 22px;
+  border-bottom: 1px solid var(--cream-dark);
+  background: rgba(13,26,46,0.025);
+}
+.head-left { flex: 1; min-width: 0; }
+.id-row { display: flex; align-items: center; gap: 9px; margin-bottom: 3px; flex-wrap: wrap; }
+.booking-id {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.5px;
+}
+.status-pill {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+.p-pending { background: var(--warn-bg);    color: var(--warn-text);  border-color: var(--warn-bd); }
+.p-claimed { background: var(--success-bg); color: var(--success);    border-color: var(--success-bd); }
+.p-passed  { background: var(--cream-dark); color: var(--text-muted); border-color: var(--cream-border); }
+.card-service { font-size: 12px; color: var(--text-mid); }
+.head-right { text-align: right; flex-shrink: 0; }
+.dt-date { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 600; color: var(--navy); display: block; }
+.dt-time { font-size: 12px; color: var(--text-mid); display: block; margin-top: 1px; }
+.dt-dur  { font-size: 11px; color: var(--text-muted); display: block; margin-top: 1px; }
+
+/* CARD BODY */
+.card-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.body-col {
+  padding: 14px 18px 14px 22px;
+  border-right: 1px solid var(--cream-dark);
+}
+.body-col:last-child { border-right: none; }
+.body-col:not(:first-child) { padding-left: 16px; }
+
+.col-head {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  margin-bottom: 10px;
+}
+.info-row { display: flex; flex-direction: column; gap: 3px; margin-bottom: 9px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-k { font-size: 10px; color: var(--text-muted); }
+.info-v { font-size: 13px; color: var(--text-navy); line-height: 1.35; }
+.info-v a { color: var(--navy-light); text-decoration: none; }
+.info-v a:hover { text-decoration: underline; }
+
+.zone-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-top: 3px;
+  border: 1px solid;
+}
+.z-local    { background: var(--success-bg); color: var(--success);   border-color: var(--success-bd); }
+.z-extended { background: var(--warn-bg);    color: var(--warn-text); border-color: var(--warn-bd); }
+.z-long     { background: var(--danger-bg);  color: var(--danger);    border-color: var(--danger-bd); }
+
+/* FINANCIALS */
+.fin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+.fin-item { display: flex; flex-direction: column; gap: 2px; }
+.fin-k { font-size: 10px; color: var(--text-muted); }
+.fin-v { font-size: 13px; color: var(--text-navy); font-weight: 700; }
+.fin-v.f-total { color: var(--navy); font-size: 16px; font-family: 'Cinzel', serif; }
+.fin-v.f-paid  { color: var(--success); }
+.fin-v.f-due   { color: var(--danger); }
+.fin-rule { grid-column: 1/-1; height: 1px; background: var(--cream-dark); margin: 3px 0; }
+
+/* EXTRAS */
+.extras-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.extras-col { padding: 12px 18px 12px 22px; border-right: 1px solid var(--cream-dark); }
+.extras-col:last-child { border-right: none; padding-left: 16px; }
+.extras-list { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.extra-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-mid); }
+.extra-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+.extra-none { font-size: 12px; color: var(--text-muted); font-style: italic; margin-top: 8px; }
+
+/* NOTE */
+.note-strip {
+  padding: 10px 18px 10px 22px;
+  background: #fffdf5;
+  border-bottom: 1px solid var(--warn-bd);
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+.note-icon { font-family: 'EB Garamond', Georgia, serif; font-size: 15px; color: var(--gold-dark); margin-top: 1px; flex-shrink: 0; }
+.note-text { font-family: 'EB Garamond', Georgia, serif; font-size: 13px; font-style: italic; color: var(--warn-text); line-height: 1.5; }
+
+/* CARD FOOTER */
+.card-foot {
+  padding: 12px 18px 12px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: rgba(13,26,46,0.02);
+}
+.foot-left { font-size: 11px; color: var(--text-muted); }
+.claimer-name { color: var(--success); font-weight: 700; }
+.claimer-ts { color: var(--text-muted); margin-left: 6px; }
+.action-group { display: flex; gap: 8px; }
+
+/* BUTTONS */
+.btn {
+  font-family: 'Lato', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 8px 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+  border: 1px solid;
+}
+.btn-claim { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+.btn-claim:hover { background: var(--navy-mid); transform: scale(1.02); }
+.btn-claim:active { transform: scale(0.98); }
+.btn-pass { background: transparent; color: var(--text-muted); border-color: var(--cream-border); }
+.btn-pass:hover { border-color: var(--text-muted); color: var(--text-mid); }
+.btn-off { background: var(--cream-dark); color: var(--text-muted); border-color: var(--cream-border); cursor: default; }
+
+/* MODAL */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(13,26,46,0.58);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-bg.open { display: flex; }
+.modal-box {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-top: 4px solid var(--gold);
+  border-radius: 6px;
+  padding: 28px 30px;
+  max-width: 440px;
+  width: 100%;
+}
+.modal-title { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 10px; letter-spacing: 0.5px; }
+.modal-body { font-size: 13px; color: var(--text-mid); line-height: 1.65; margin-bottom: 22px; }
+.modal-body strong { color: var(--text-navy); font-weight: 700; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-cancel {
+  background: transparent; border: 1px solid var(--cream-border); border-radius: 4px; padding: 9px 20px;
+  font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+}
+.btn-cancel:hover { border-color: var(--text-muted); }
+.btn-confirm {
+  background: var(--navy); border: 1px solid var(--navy); border-radius: 4px; padding: 9px 22px;
+  font-family: 'Lato', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--gold); cursor: pointer; transition: all 0.2s;
+}
+.btn-confirm:hover { background: var(--navy-mid); }
+
+/* STATE BOXES */
+.state-box { text-align: center; padding: 64px 20px; }
+.spinner {
+  width: 30px; height: 30px;
+  border: 2px solid var(--cream-border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  margin: 0 auto 16px;
+}
+.state-title { font-family: 'Cinzel', serif; font-size: 15px; color: var(--text-mid); margin-bottom: 6px; letter-spacing: 0.5px; }
+.state-sub { font-size: 13px; color: var(--text-muted); }
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold);
+  border-radius: 5px;
+  padding: 12px 22px;
+  font-size: 13px; font-weight: 700;
+  color: var(--cream);
+  letter-spacing: 0.3px;
+  z-index: 400;
+  transition: transform 0.35s cubic-bezier(0.34,1.4,0.64,1);
+  max-width: calc(100vw - 48px);
+  white-space: normal;
+  text-align: center;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.t-success { border-bottom-color: var(--success); }
+.toast.t-error   { border-bottom-color: var(--danger); }
+
+/* FOOTER */
+.site-footer {
+  background: var(--navy);
+  border-top: 2px solid var(--gold-dark);
+  padding: 20px 24px;
+  margin-top: auto;
+}
+.footer-inner {
+  max-width: 1140px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.footer-copy  { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 0.5px; }
+.footer-legal { font-size: 11px; color: rgba(255,255,255,0.22); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .card-body { grid-template-columns: 1fr 1fr; }
+  .body-col:nth-child(3) { grid-column: 1 / -1; border-right: none; border-top: 1px solid var(--cream-dark); }
+}
+@media (max-width: 640px) {
+  .brand-tagline { display: none; }
+  .brand-name { font-size: 13px; }
+  .header-inner { height: 58px; }
+  .logo-circle { width: 36px; height: 36px; }
+  .notary-badge { padding: 5px 10px; font-size: 11px; }
+  .refresh-btn { padding: 5px 10px; font-size: 10px; }
+
+  .notice-inner { gap: 8px; }
+  .notice-item { font-size: 9px; letter-spacing: 0.8px; }
+
+  .main { padding: 16px 14px 48px; }
+
+  .stats-row { gap: 8px; }
+  .stat-num { font-size: 22px; }
+  .stat-card { padding: 10px 12px; }
+
+  .filter-row { gap: 6px; }
+  .filter-btn { padding: 7px 13px; font-size: 10px; }
+
+  /* Cards: fully single-column */
+  .card-body { grid-template-columns: 1fr; }
+  .body-col { border-right: none !important; border-bottom: 1px solid var(--cream-dark); padding: 12px 14px 12px 18px; }
+  .body-col:last-child { border-bottom: none; }
+
+  .card-head { padding: 12px 14px 10px 18px; }
+  /* Stack ID row and datetime vertically on mobile */
+  .card-head { flex-direction: column; gap: 6px; }
+  .head-right { text-align: left; display: flex; gap: 10px; align-items: baseline; }
+  .dt-date { font-size: 13px; }
+  .dt-time { margin-top: 0; }
+  .dt-dur  { margin-top: 0; }
+
+  .extras-row { grid-template-columns: 1fr; }
+  .extras-col { border-right: none !important; border-bottom: 1px solid var(--cream-dark); padding: 10px 14px 10px 18px; }
+  .extras-col:last-child { border-bottom: none; }
+
+  .note-strip { padding: 10px 14px 10px 18px; }
+
+  /* Footer: stack hint text above, buttons full-width below */
+  .card-foot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 12px 14px 14px 18px;
+  }
+  .foot-left { font-size: 11px; }
+  .action-group { width: 100%; display: flex; gap: 8px; }
+  .btn-claim { flex: 1; padding: 12px 16px; font-size: 12px; text-align: center; }
+  .btn-pass  { padding: 12px 16px; font-size: 12px; }
+  .btn-off   { width: 100%; padding: 12px 16px; font-size: 12px; text-align: center; }
+
+  /* Modal */
+  .modal-box { padding: 22px 20px; }
+  .modal-actions { flex-direction: column-reverse; }
+  .btn-cancel, .btn-confirm { width: 100%; padding: 12px; font-size: 12px; text-align: center; }
+
+  /* Footer */
+  .footer-inner { flex-direction: column; gap: 4px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="logo-circle">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="#C9A84C" stroke-width="1.5"/>
+          <path d="M12 6v6l4 2" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-stack">
+        <span class="brand-name">Round The Clock Notary</span>
+        <span class="brand-tagline">Dispatch Board &nbsp;·&nbsp; Hood County, TX</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="notary-badge">
+        <span class="live-dot"></span>
+        <span id="notaryLabel">Loading…</span>
+      </div>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadJobs()">
+        <span class="spin-ring" id="spinRing"></span>
+        Refresh
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- NOTICE BAR -->
+<div class="notice-bar">
+  <div class="notice-inner">
+    <div class="notice-item"><span class="n-dot">&#9670;</span> Jobs claimed first-come, first-served</div>
+    <div class="notice-item"><span class="n-dot">&#9670;</span> Claiming locks the job &amp; notifies the client</div>
+    <div class="notice-item"><span class="n-dot">&#9670;</span> Board auto-refreshes every 60 seconds</div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="claimModal">
+  <div class="modal-box">
+    <div class="modal-title">Confirm Claim</div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" id="confirmBtn" onclick="submitClaim()">Yes, Claim It</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="stats-row">
+    <div class="stat-card"><span class="stat-num" id="sPending">—</span><span class="stat-lbl">Pending</span></div>
+    <div class="stat-card"><span class="stat-num" id="sClaimed">—</span><span class="stat-lbl">Claimed</span></div>
+    <div class="stat-card"><span class="stat-num" id="sTotal">—</span><span class="stat-lbl">All Jobs</span></div>
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-lbl">View:</span>
+    <button class="filter-btn active" onclick="setFilter('all',this)">All Jobs</button>
+    <button class="filter-btn" onclick="setFilter('PENDING',this)">Pending</button>
+    <button class="filter-btn" onclick="setFilter('CLAIMED',this)">Claimed</button>
+  </div>
+
+  <div id="jobsContainer">
+    <div class="state-box">
+      <div class="spinner"></div>
+      <div class="state-title">Loading Dispatch Board</div>
+      <div class="state-sub">Fetching available jobs…</div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-copy">© 2026 Round The Clock Notary · ByPatience LLC · Hood County, TX</div>
+    <div class="footer-legal">Not an attorney. Not legal advice. · Licensed · Bonded · Insured.</div>
+  </div>
+</footer>
+
+<script>
+const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbym6SCXgNeIVdiy7iU4b1eAYW8sHBL7nQeIH_j4Zqxyn5sAxgRkpAAm8qH85ad7kt4M/exec';
+const params       = new URLSearchParams(window.location.search);
+const NOTARY_TOKEN = params.get('token') || '';
+const NOTARY_NAME  = params.get('notary') || 'Jane Smith';
+
+// ── MOCK MODE ─────────────────────────────────────────────
+// Active when SCRIPT_URL is placeholder OR ?mock=true in URL.
+// Simulates real API responses so you can test every state locally.
+const MOCK_MODE = params.get('mock') === 'true' || SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+
+const MOCK_JOBS = [
+  {
+    // Second Hand, local, daytime, single print add-on
+    bookingId:'RTC-SH-260317-001', status:'PENDING',
+    clientName:'Margaret Holloway', clientPhone:'(817) 555-0142', clientEmail:'margaret.holloway@email.com',
+    address:'412 W Bridge St, Granbury, TX 76048', miles:3.2,
+    date:'Sat, Mar 21, 2026', time:'10:30 AM', duration:'~30 min',
+    dateTime:'Sat, Mar 21, 2026 at 10:30 AM',
+    serviceType:'Second Hand — Single Notarization',
+    addons:['Single-sided print (5 pages)'], surcharges:[],
+    baseFee:20, stateFee:10, travelFee:0, addonsTotal:5, surchargesTotal:0,
+    total:35, depositPaid:30, dueAtSigning:5,
+    noteToNotary:'Client is elderly. Please allow extra time. Documents are loan modification paperwork.',
+    notaryName:'', claimedAt:''
+  },
+  {
+    // Minute Hand, evening + weekend, Zone 2 travel
+    bookingId:'RTC-MH-260317-002', status:'PENDING',
+    clientName:'Derek Simmons', clientPhone:'(817) 555-0287', clientEmail:'d.simmons@gmail.com',
+    address:'1809 Weatherford Hwy, Granbury, TX 76049', miles:8.4,
+    date:'Sat, Mar 22, 2026', time:'7:00 PM', duration:'~45 min',
+    dateTime:'Sat, Mar 22, 2026 at 7:00 PM',
+    serviceType:'Minute Hand — Standard Package',
+    addons:[], surcharges:['Evening / Off the Clock (+$15)'],
+    baseFee:30, stateFee:10, travelFee:4.84, addonsTotal:0, surchargesTotal:15,
+    total:59.84, depositPaid:30, dueAtSigning:29.84,
+    noteToNotary:'', notaryName:'', claimedAt:''
+  },
+  {
+    // Bedside Clock, already claimed by someone else
+    bookingId:'RTC-BC-260317-003', status:'CLAIMED',
+    clientName:'Sandra Fuentes', clientPhone:'(817) 555-0391', clientEmail:'sfuentes@hotmail.com',
+    address:'3204 Fall Creek Hwy, Granbury, TX 76049', miles:14.1,
+    date:'Tue, Mar 24, 2026', time:'9:00 AM', duration:'~60 min',
+    dateTime:'Tue, Mar 24, 2026 at 9:00 AM',
+    serviceType:'Bedside Clock — Hospital / Care Facility',
+    addons:['Witness service (1)'], surcharges:[],
+    baseFee:50, stateFee:10, travelFee:13.05, addonsTotal:20, surchargesTotal:0,
+    total:93.05, depositPaid:50, dueAtSigning:43.05,
+    noteToNotary:'Patient at Baylor Scott & White. Check in at front desk, room 214.',
+    notaryName:'Maria Torres', claimedAt:'Mar 18, 9:12 AM'
+  },
+  {
+    // Closing Table, long distance, Rush Hour, witness — tests cap scenario
+    bookingId:'RTC-CT-260317-004', status:'PENDING',
+    clientName:'Paul & Renee Okafor', clientPhone:'(817) 555-0458', clientEmail:'paul.okafor@kw.com',
+    address:'88 Pecan Plantation Blvd, Granbury, TX 76049', miles:22.5,
+    date:'Wed, Mar 25, 2026', time:'4:30 PM', duration:'~90 min',
+    dateTime:'Wed, Mar 25, 2026 at 4:30 PM',
+    serviceType:'Closing Table — Loan Signing',
+    addons:['Witness service (1)','Duplex print (12 pages)'],
+    surcharges:['Rush Hour — within 1 hour (+$100)'],
+    baseFee:150, stateFee:30, travelFee:75, addonsTotal:38, surchargesTotal:100,
+    total:393, depositPaid:75, dueAtSigning:318,
+    noteToNotary:'Buyer-side closing. Title company: Granbury Title. Contact: Lisa Reyes (817) 555-0500.',
+    notaryName:'', claimedAt:''
+  }
+];
+
+let MOCK_STATE = JSON.parse(JSON.stringify(MOCK_JOBS));
+
+async function mockGetJobs() {
+  await new Promise(r => setTimeout(r, 600));
+  return { jobs: JSON.parse(JSON.stringify(MOCK_STATE)) };
+}
+
+async function mockClaim(bookingId, notaryName) {
+  await new Promise(r => setTimeout(r, 800));
+  const job = MOCK_STATE.find(j => j.bookingId === bookingId);
+  if (!job) return { error: 'Booking not found.' };
+  if (job.status === 'CLAIMED') return { error: `Already claimed by ${job.notaryName}.` };
+  job.status = 'CLAIMED';
+  job.notaryName = notaryName;
+  job.claimedAt = 'Just now';
+  return { success: true };
+}
+
+async function mockPass(bookingId) {
+  await new Promise(r => setTimeout(r, 400));
+  const job = MOCK_STATE.find(j => j.bookingId === bookingId);
+  if (job) job.status = 'PASSED';
+  return { success: true };
+}
+// ── END MOCK MODE ─────────────────────────────────────────
+
+let allJobs = [], currentFilter = 'all', pendingClaimId = null;
+// Jobs this notary already claimed this calendar month (0-indexed for cap logic)
+let claimedThisMonth = 0;
+
+// ── EARNINGS ENGINE ───────────────────────────────────────
+// Base: 50/50 split. State fee: notary keeps 100%. Travel: notary keeps 100%.
+// Surcharges: 50/50. Add-ons: 50/50.
+// Dispatch fee: $15 flat for jobs 1-10 this month. $0 once cap ($150) is reached.
+// Deposit: RTCN keeps entirely — never counted in notary earnings.
+function calcEarnings(j) {
+  const base        = parseFloat(j.baseFee)        || 0;
+  const stateFee    = parseFloat(j.stateFee)        || 10;
+  const travel      = parseFloat(j.travelFee)       || 0;
+  const addons      = parseFloat(j.addonsTotal)     || 0;
+  const surcharges  = parseFloat(j.surchargesTotal) || 0;
+  const depositPaid = parseFloat(j.depositPaid)     || 0;
+  const total       = parseFloat(j.total)           || 0;
+
+  const collectAtDoor  = total - depositPaid;
+  const keepBase       = base * 0.50;
+  const keepStateFee   = stateFee;
+  const keepTravel     = travel;
+  const keepAddons     = addons * 0.50;
+  const keepSurcharges = surcharges * 0.50;
+  const capReached     = claimedThisMonth >= 10;
+  const dispatchFee    = capReached ? 0 : 15;
+  const gross          = keepBase + keepStateFee + keepTravel + keepAddons + keepSurcharges;
+  const net            = Math.max(0, gross - dispatchFee);
+
+  return { collectAtDoor, keepBase, keepStateFee, keepTravel, keepAddons,
+           keepSurcharges, dispatchFee, capReached, gross, net };
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('notaryLabel').textContent = NOTARY_NAME;
+  if (MOCK_MODE) {
+    const bar = document.querySelector('.notice-bar');
+    const pill = document.createElement('div');
+    pill.style.cssText = 'background:#7a5c10;color:#fdf6e4;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;padding:6px;border-bottom:1px solid #e8d48a;';
+    pill.textContent = '⚙ Mock Mode — no real data — test all flows freely';
+    bar.insertAdjacentElement('afterend', pill);
+  }
+  loadJobs();
+  setInterval(loadJobs, 60000);
+});
+
+async function loadJobs() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  try {
+    let data;
+    if (MOCK_MODE) {
+      data = await mockGetJobs();
+    } else {
+      const res = await fetch(`${SCRIPT_URL}?action=getJobs&token=${encodeURIComponent(NOTARY_TOKEN)}`);
+      data = await res.json();
+    }
+    if (data.error) { showToast(data.error, 'error'); return; }
+    allJobs = data.jobs || [];
+    updateStats();
+    render();
+  } catch {
+    showToast('Could not connect. Check your link.', 'error');
+    document.getElementById('jobsContainer').innerHTML = `
+      <div class="state-box">
+        <div class="state-title">Connection Failed</div>
+        <div class="state-sub">Verify your dispatch URL is correct.</div>
+      </div>`;
+  } finally {
+    btn.classList.remove('spinning');
+  }
+}
+
+function updateStats() {
+  const pending = allJobs.filter(j => j.status === 'PENDING').length;
+  const claimed = allJobs.filter(j => j.status === 'CLAIMED').length;
+  document.getElementById('sPending').textContent = pending;
+  document.getElementById('sClaimed').textContent = claimed;
+  document.getElementById('sTotal').textContent   = allJobs.length;
+  // Count how many jobs THIS notary claimed this calendar month
+  // In live mode Apps Script should send claimedThisMonth in the response.
+  // In mock mode, count claimed jobs assigned to this notary name.
+  if (MOCK_MODE) {
+    const thisMonth = new Date().getMonth();
+    const thisYear  = new Date().getFullYear();
+    claimedThisMonth = MOCK_STATE.filter(j =>
+      j.status === 'CLAIMED' && j.notaryName === NOTARY_NAME
+    ).length;
+  }
+}
+
+function setFilter(f, el) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+function render() {
+  const container = document.getElementById('jobsContainer');
+  const jobs = currentFilter === 'all' ? allJobs : allJobs.filter(j => j.status === currentFilter);
+  if (!jobs.length) {
+    container.innerHTML = `<div class="state-box"><div class="state-title">No Jobs Found</div><div class="state-sub">Nothing here yet — check back soon or change the filter.</div></div>`;
+    return;
+  }
+  const pending = jobs.filter(j => j.status === 'PENDING');
+  const claimed = jobs.filter(j => j.status === 'CLAIMED');
+  const passed  = jobs.filter(j => j.status === 'PASSED');
+  let html = '';
+  if (pending.length) html += block('Open Jobs', pending);
+  if (claimed.length) html += block('Claimed', claimed);
+  if (passed.length)  html += block('Passed', passed);
+  container.innerHTML = html;
+}
+
+function block(label, jobs) {
+  return `<div class="section-div"><div class="div-line"></div><div class="div-label">${label}</div><div class="div-line"></div></div>
+          <div class="job-stack">${jobs.map(card).join('')}</div>`;
+}
+
+function card(j) {
+  const sc     = j.status === 'CLAIMED' ? 's-claimed' : j.status === 'PASSED' ? 's-passed' : '';
+  const stripe = j.status === 'CLAIMED' ? 'st-claimed' : j.status === 'PASSED' ? 'st-passed' : 'st-pending';
+  const pill   = j.status === 'PENDING' ? 'p-pending' : j.status === 'CLAIMED' ? 'p-claimed' : 'p-passed';
+  const miles  = parseFloat(j.miles) || 0;
+  const zc     = miles <= 10 ? 'z-local' : miles <= 20 ? 'z-extended' : 'z-long';
+  const zl     = miles <= 10 ? 'Local Zone' : miles <= 20 ? 'Extended Zone' : 'Long Distance';
+
+  const addons = (j.addons||[]).length
+    ? j.addons.map(a=>`<div class="extra-item"><span class="extra-dot"></span>${h(a)}</div>`).join('')
+    : `<div class="extra-none">None</div>`;
+
+  const surcharges = (j.surcharges||[]).length
+    ? j.surcharges.map(s=>`<div class="extra-item"><span class="extra-dot" style="background:var(--gold-dark)"></span>${h(s)}</div>`).join('')
+    : `<div class="extra-none">None</div>`;
+
+  const noteStrip = j.noteToNotary
+    ? `<div class="note-strip"><span class="note-icon">☛</span><span class="note-text">${h(j.noteToNotary)}</span></div>` : '';
+
+  // ── EARNINGS PANEL (pending jobs only) ──
+  const earnPanel = j.status === 'PENDING' ? (() => {
+    const e = calcEarnings(j);
+    const dispClass = e.dispatchFee > 0 ? 'neg' : 'zero';
+    const capBadge  = e.capReached
+      ? `<span class="earn-cap-badge">Cap reached — $0 fee</span>` : '';
+    return `
+    <div class="earn-panel">
+      <div class="earn-header"><span class="earn-header-dot"></span>Your Earnings If You Claim This Job</div>
+      <div class="earn-grid">
+        <div class="earn-item">
+          <span class="earn-k">Base (your 50%)</span>
+          <span class="earn-v">$${fmt(e.keepBase)}</span>
+        </div>
+        <div class="earn-item">
+          <span class="earn-k">State fee (yours)</span>
+          <span class="earn-v">$${fmt(e.keepStateFee)}</span>
+        </div>
+        <div class="earn-item">
+          <span class="earn-k">Travel (yours)</span>
+          <span class="earn-v">$${fmt(e.keepTravel)}</span>
+        </div>
+        <div class="earn-item">
+          <span class="earn-k">Add-ons (your 50%)</span>
+          <span class="earn-v">$${fmt(e.keepAddons)}</span>
+        </div>
+        <div class="earn-item">
+          <span class="earn-k">Surcharges (your 50%)</span>
+          <span class="earn-v">$${fmt(e.keepSurcharges)}</span>
+        </div>
+        <div class="earn-item">
+          <span class="earn-k">Dispatch fee</span>
+          <span class="earn-v ${dispClass}">${e.dispatchFee > 0 ? '-$'+fmt(e.dispatchFee) : '$0'}</span>
+        </div>
+      </div>
+      <div class="earn-divider"></div>
+      <div class="earn-total-row">
+        <div class="earn-total-left">
+          <span class="earn-total-label">You Take Home ${capBadge}</span>
+          <span class="earn-total-sub">Job #${claimedThisMonth + 1} this month${e.capReached ? ' — cap already hit, no dispatch fee' : ` — $${15 * (10 - claimedThisMonth)} left before cap`}</span>
+        </div>
+        <span class="earn-total-amount">$${fmt(e.net)}</span>
+      </div>
+      <div class="earn-collect-row">
+        You collect <strong>$${fmt(e.collectAtDoor)}</strong> at the door. RTCN already collected the <strong>$${fmt(j.depositPaid)}</strong> deposit.
+      </div>
+    </div>`;
+  })() : '';
+
+  const footLeft = j.status === 'CLAIMED'
+    ? `<div class="foot-left">Claimed by <span class="claimer-name">${h(j.notaryName||'—')}</span><span class="claimer-ts">${h(j.claimedAt||'')}</span></div>`
+    : `<div class="foot-left">Tap "Claim Job" to lock this assignment to you.</div>`;
+
+  const footRight = j.status === 'PENDING'
+    ? `<div class="action-group">
+         <button class="btn btn-pass" onclick="passJob('${j.bookingId}')">Pass</button>
+         <button class="btn btn-claim" onclick="openModal('${j.bookingId}','${ea(j.clientName)}','${ea(j.dateTime)}')">Claim Job</button>
+       </div>`
+    : `<button class="btn btn-off" disabled>${j.status==='CLAIMED'?'Claimed':'Passed'}</button>`;
+
+  return `
+<div class="job-card ${sc}" id="card-${j.bookingId}">
+  <div class="card-stripe ${stripe}"></div>
+  <div class="card-head">
+    <div class="head-left">
+      <div class="id-row">
+        <span class="booking-id">${h(j.bookingId)}</span>
+        <span class="status-pill ${pill}">${j.status}</span>
+      </div>
+      <div class="card-service">${h(j.serviceType)}</div>
+    </div>
+    <div class="head-right">
+      <span class="dt-date">${h(j.date)}</span>
+      <span class="dt-time">${h(j.time)}</span>
+      <span class="dt-dur">${h(j.duration||'')}</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="body-col">
+      <div class="col-head">Client</div>
+      <div class="info-row"><span class="info-k">Name</span><span class="info-v">${h(j.clientName)}</span></div>
+      <div class="info-row"><span class="info-k">Phone</span><span class="info-v"><a href="tel:${ea(j.clientPhone)}">${h(j.clientPhone)}</a></span></div>
+      <div class="info-row"><span class="info-k">Email</span><span class="info-v" style="word-break:break-all"><a href="mailto:${ea(j.clientEmail)}">${h(j.clientEmail)}</a></span></div>
+    </div>
+    <div class="body-col">
+      <div class="col-head">Location</div>
+      <div class="info-row"><span class="info-k">Address</span><span class="info-v">${h(j.address)}</span></div>
+      <div class="info-row"><span class="info-k">Distance</span><span class="info-v">${miles} mi<br><span class="zone-tag ${zc}">${zl}</span></span></div>
+    </div>
+    <div class="body-col">
+      <div class="col-head">Order Total</div>
+      <div class="fin-grid">
+        <div class="fin-item"><span class="fin-k">Base fee</span><span class="fin-v">$${fmt(j.baseFee)}</span></div>
+        <div class="fin-item"><span class="fin-k">Travel fee</span><span class="fin-v">$${fmt(j.travelFee)}</span></div>
+        <div class="fin-item"><span class="fin-k">Add-ons</span><span class="fin-v">$${fmt(j.addonsTotal)}</span></div>
+        <div class="fin-item"><span class="fin-k">Surcharges</span><span class="fin-v">$${fmt(j.surchargesTotal)}</span></div>
+        <div class="fin-rule"></div>
+        <div class="fin-item"><span class="fin-k">Client total</span><span class="fin-v f-total">$${fmt(j.total)}</span></div>
+        <div class="fin-item"><span class="fin-k">Deposit (RTCN)</span><span class="fin-v" style="color:var(--text-muted)">$${fmt(j.depositPaid)}</span></div>
+        <div class="fin-item" style="grid-column:1/-1"><span class="fin-k">You collect at door</span><span class="fin-v f-due">$${fmt(j.dueAtSigning)}</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="extras-row">
+    <div class="extras-col">
+      <div class="col-head">Add-Ons</div>
+      <div class="extras-list">${addons}</div>
+    </div>
+    <div class="extras-col">
+      <div class="col-head">Surcharges</div>
+      <div class="extras-list">${surcharges}</div>
+    </div>
+  </div>
+  ${earnPanel}
+  ${noteStrip}
+  <div class="card-foot">${footLeft}${footRight}</div>
+</div>`;
+}
+
+function openModal(bookingId, clientName, dateTime) {
+  pendingClaimId = bookingId;
+  document.getElementById('modalBody').innerHTML =
+    `Claiming <strong>${bookingId}</strong> for <strong>${h(clientName)}</strong> on <strong>${h(dateTime)}</strong>.<br><br>
+     This locks the job to you, sends the client a confirmation email, and notifies Sharee.`;
+  document.getElementById('claimModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('claimModal').classList.remove('open');
+  pendingClaimId = null;
+}
+async function submitClaim() {
+  if (!pendingClaimId) return;
+  const btn = document.getElementById('confirmBtn');
+  btn.textContent = 'Claiming…'; btn.disabled = true;
+  try {
+    let data;
+    if (MOCK_MODE) {
+      data = await mockClaim(pendingClaimId, NOTARY_NAME);
+    } else {
+      const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'claimJob', bookingId:pendingClaimId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN }) });
+      data = await res.json();
+    }
+    closeModal();
+    if (data.success) { showToast(`Job ${pendingClaimId} claimed! ${MOCK_MODE ? '(Mock — no emails sent)' : 'Client confirmation sent.'}`, 'success'); await loadJobs(); }
+    else showToast(data.error || 'Claim failed. Try again.', 'error');
+  } catch { closeModal(); showToast('Network error. Please retry.', 'error'); }
+  finally { btn.textContent = 'Yes, Claim It'; btn.disabled = false; }
+}
+async function passJob(bookingId) {
+  try {
+    let data;
+    if (MOCK_MODE) {
+      data = await mockPass(bookingId);
+    } else {
+      const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ action:'passJob', bookingId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN }) });
+      data = await res.json();
+    }
+    if (data.success) { showToast(`Passed on ${bookingId}.`); await loadJobs(); }
+    else showToast(data.error || 'Could not pass.', 'error');
+  } catch { showToast('Network error.', 'error'); }
+}
+
+function fmt(n) { return (parseFloat(n)||0).toFixed(2); }
+function h(s)   { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ea(s)  { return String(s||'').replace(/"/g,'&quot;'); }
+
+let toastT;
+function showToast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast t-${type} show`;
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 4200);
+}
+
+document.getElementById('claimModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('claimModal')) closeModal();
+});
+</script>
+</body>
+</html>
