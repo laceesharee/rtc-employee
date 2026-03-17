@@ -826,7 +826,7 @@ body {
 /* summary bar */
 .tracker-summary {
   display: grid;
-  grid-template-columns: repeat(5, 1fr) 2fr;
+  grid-template-columns: repeat(6, 1fr) 2fr;
   border-bottom: 1px solid var(--cream-border);
   background: var(--cream);
 }
@@ -918,6 +918,7 @@ body {
 @media (max-width: 640px) {
   .tracker-summary { grid-template-columns: 1fr 1fr; }
   .ts-stat:nth-child(n+3) { border-top: 1px solid var(--cream-border); }
+  .ts-stat:nth-child(n+5) { border-top: 1px solid var(--cream-border); }
   .ts-cap { grid-column: 1 / -1; border-top: 1px solid var(--cream-border); }
   .month-hdr-right { gap: 10px; }
   .mhs:nth-child(n+3) { display: none; }
@@ -1246,6 +1247,7 @@ function buildMockEarnings() {
                   (parseFloat(j.addonsTotal)||0) + (parseFloat(j.surchargesTotal)||0);
     return { bookingId:j.bookingId, serviceType:j.serviceType, date:j.date,
              status:'COMPLETED', atDoor:parseFloat(j.dueAtSigning)||0,
+             depositRTCN:parseFloat(j.depositPaid)||0,
              rtcnFee:fee, net:gross - fee };
   });
   const curAtDoor = currentJobs.reduce((s,j) => s + j.atDoor, 0);
@@ -1272,17 +1274,23 @@ function renderTracker() {
   const capPct = Math.min(Math.round((capAmt / 150) * 100), 100);
   const capLeft = Math.max(0, 150 - rtcnFeesThisMonth);
 
+  // RTCN Due To Notary = deposits collected minus RTCN fees (capped at $150 max fees)
+  const rtcnCollected  = Math.min(d.curRtcn, 150);
+  const totalDeposits  = d.currentJobs.reduce((s,j) => s + (j.depositRTCN || 0), 0);
+  const rtcnDueNotary  = Math.max(0, totalDeposits - rtcnCollected);
+
   document.getElementById('trackerSummary').innerHTML = `
     <div class="tracker-summary">
       <div class="ts-stat"><span class="ts-lbl">Collected at Door</span><span class="ts-val">$${fmt(d.curAtDoor)}</span><span class="ts-sub">gross this month</span></div>
       <div class="ts-stat"><span class="ts-lbl">You Have Earned</span><span class="ts-val green">$${fmt(d.curNet)}</span><span class="ts-sub">net after RTCN fee</span></div>
       <div class="ts-stat"><span class="ts-lbl">RTCN Fees</span><span class="ts-val gold">$${fmt(d.curRtcn)}</span><span class="ts-sub">toward $150 cap</span></div>
       <div class="ts-stat"><span class="ts-lbl">Jobs This Month</span><span class="ts-val">${d.currentJobs.length}</span><span class="ts-sub">completed</span></div>
-      <div class="ts-stat"><span class="ts-lbl">Annual Net</span><span class="ts-val green">$${fmt(d.ytdNet)}</span><span class="ts-sub">YTD ${d.year}</span></div>
+      <div class="ts-stat"><span class="ts-lbl">RTCN Collected</span><span class="ts-val gold">$${fmt(rtcnCollected)}</span><span class="ts-sub">fees retained by RTCN</span></div>
+      <div class="ts-stat"><span class="ts-lbl">RTCN Due To Notary</span><span class="ts-val green">$${fmt(rtcnDueNotary)}</span><span class="ts-sub">deposits minus fees owed</span></div>
       <div class="ts-cap">
         <div class="ts-cap-top"><span class="ts-cap-lbl">Monthly Cap Progress</span><span class="ts-cap-nums">$${fmt(capAmt)} <span>of $150</span></span></div>
         <div class="ts-cap-track"><div class="ts-cap-fill" style="width:${capPct}%"></div></div>
-        <div class="ts-cap-note"><span>$${fmt(capLeft)} remaining</span><span class="free">${capAmt >= 150 ? 'Cap hit — all jobs free!' : 'All jobs fee-free after $150'}</span></div>
+        <div class="ts-cap-note"><span>$${fmt(capLeft)} remaining</span><span class="free">${capAmt >= 150 ? 'Cap hit — all jobs fee-free!' : 'All jobs fee-free after $150'}</span></div>
       </div>
     </div>`;
 
@@ -1319,6 +1327,17 @@ function renderTracker() {
   d.archived.forEach((m, idx) => {
     const key  = 'arch_' + idx;
     const open = openMonths[key];
+    const archJobs = (m.jobList || []);
+    const archRows = archJobs.length > 0
+      ? archJobs.map((j,i) => `<tr style="background:${i%2===0?'var(--white)':'var(--cream)'}">
+          <td>${h(j.bookingId)}</td><td>${h((j.serviceType||'').split('—')[0].trim())}</td><td>${h(j.date)}</td>
+          <td>$${fmt(j.atDoor)}</td><td class="rtcn">$${fmt(j.rtcnFee)}</td><td class="net">$${fmt(j.net)}</td>
+        </tr>`).join('')
+        + `<tr class="totals-row"><td colspan="3">${h(m.label)} — ${m.jobs} jobs</td><td>$${fmt(m.atDoor)}</td><td class="rtcn">$${fmt(m.rtcnFees)}</td><td class="net">$${fmt(m.net)}</td></tr>`
+      : `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);font-style:italic;padding:10px;">
+          ${m.jobs} jobs completed · $${fmt(m.atDoor)} collected · $${fmt(m.rtcnFees)} RTCN fees · $${fmt(m.net)} net
+        </td></tr>`;
+    const rtcnDue = Math.max(0, (m.totalDeposits || 0) - Math.min(m.rtcnFees, 150));
     html += `<div class="month-section">
       <div class="month-hdr" onclick="toggleMonth('${key}')">
         <div class="month-hdr-left"><span class="month-label">${h(m.label)}</span><span class="month-badge badge-closed">Closed</span></div>
@@ -1331,7 +1350,14 @@ function renderTracker() {
         </div>
       </div>
       <div id="body_${key}" style="display:${open?'block':'none'};" class="month-body">
-        <p style="font-size:12px;color:var(--text-muted);padding:8px 0;">${m.jobs} jobs · $${fmt(m.atDoor)} at door · $${fmt(m.rtcnFees)} RTCN fees · $${fmt(m.net)} net take-home</p>
+        <table class="earn-table">
+          <thead><tr><th>Booking ID</th><th>Service</th><th>Date</th><th>At Door</th><th>RTCN Fee</th><th>You Net</th></tr></thead>
+          <tbody>${archRows}</tbody>
+        </table>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--cream-border);font-size:11px;color:var(--text-muted);">
+          <span>RTCN Collected: <strong style="color:var(--gold-dark);">$${fmt(Math.min(m.rtcnFees,150))}</strong></span>
+          <span>RTCN Due To Notary: <strong style="color:var(--success);">$${fmt(rtcnDue)}</strong></span>
+        </div>
       </div>
     </div>`;
   });
