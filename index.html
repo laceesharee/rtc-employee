@@ -602,6 +602,192 @@ body {
   /* Footer */
   .footer-inner { flex-direction: column; gap: 4px; text-align: center; }
 }
+
+/* ── EARNINGS PANEL ── */
+.earn-panel {
+  padding: 16px 18px 16px 22px;
+  background: var(--success-bg);
+  border-top: 1px solid var(--success-bd);
+  border-bottom: 1px solid var(--success-bd);
+}
+.earn-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--success);
+  margin-bottom: 12px;
+}
+.earn-header-dot {
+  width: 6px; height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.earn-job-total {
+  background: var(--navy);
+  border-radius: 5px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.earn-jt-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(201,168,76,0.7);
+  display: block;
+  margin-bottom: 2px;
+}
+.earn-jt-val {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+}
+.earn-jt-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+}
+.earn-splits {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--success-bd);
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.earn-split-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--success-bd);
+  background: var(--white);
+}
+.earn-split-row:last-child { border-bottom: none; }
+.earn-split-label {
+  font-size: 12px;
+  color: var(--text-mid);
+  font-weight: 500;
+}
+.earn-split-label span {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+  font-style: italic;
+}
+.earn-split-val { font-size: 13px; font-weight: 700; }
+.earn-split-val.you  { color: var(--success); }
+.earn-split-val.rtcn { color: var(--text-muted); }
+.earn-takehome {
+  background: var(--success-bg);
+  border: 1px solid var(--success-bd);
+  border-radius: 5px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.earn-th-left { display: flex; flex-direction: column; gap: 3px; }
+.earn-th-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--success);
+}
+.earn-th-sub { font-size: 10px; color: var(--text-muted); font-style: italic; }
+.earn-th-amount {
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--success);
+}
+.cap-bar-wrap { margin-top: 4px; }
+.cap-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cap-bar-label strong { color: var(--text-navy); }
+.cap-bar-track {
+  height: 6px;
+  background: var(--cream-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.cap-bar-fill {
+  height: 6px;
+  background: var(--gold);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+@media (max-width: 640px) {
+  .earn-panel { padding: 14px 14px 14px 18px; }
+  .earn-th-amount { font-size: 22px; }
+  .earn-jt-val { font-size: 18px; }
+}
+
+/* ── RECEIPT STYLES (order total col) ── */
+.receipt-cat {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  padding: 7px 0 3px;
+  display: block;
+}
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 12px;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--cream-dark);
+}
+.receipt-row:last-of-type { border-bottom: none; }
+.receipt-none { color: var(--text-muted); font-style: italic; }
+.receipt-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-navy);
+  border-top: 2px solid var(--text-navy);
+  padding-top: 6px;
+  margin-top: 8px;
+}
+.receipt-deposit {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-top: 4px;
+}
+.receipt-due {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--danger);
+  padding-top: 3px;
+}
 </style>
 </head>
 <body>
@@ -733,8 +919,8 @@ const MOCK_JOBS = [
     dateTime:'Tue, Mar 24, 2026 at 9:00 AM',
     serviceType:'Bedside Clock — Hospital / Care Facility',
     addons:['Witness service (1)'], surcharges:[],
-    baseFee:50, stateFee:10, travelFee:13.05, addonsTotal:20, surchargesTotal:0,
-    total:93.05, depositPaid:50, dueAtSigning:43.05,
+    baseFee:75, stateFee:0, travelFee:13.05, addonsTotal:20, surchargesTotal:0,
+    total:108.05, depositPaid:50, dueAtSigning:58.05,
     noteToNotary:'Patient at Baylor Scott & White. Check in at front desk, room 214.',
     notaryName:'Maria Torres', claimedAt:'Mar 18, 9:12 AM'
   },
@@ -748,8 +934,8 @@ const MOCK_JOBS = [
     serviceType:'Closing Table — Loan Signing',
     addons:['Witness service (1)','Duplex print (12 pages)'],
     surcharges:['Rush Hour — within 1 hour (+$100)'],
-    baseFee:150, stateFee:30, travelFee:75, addonsTotal:38, surchargesTotal:100,
-    total:393, depositPaid:75, dueAtSigning:318,
+    baseFee:150, stateFee:0, travelFee:75, addonsTotal:38, surchargesTotal:100,
+    total:363, depositPaid:75, dueAtSigning:288,
     noteToNotary:'Buyer-side closing. Title company: Granbury Title. Contact: Lisa Reyes (817) 555-0500.',
     notaryName:'', claimedAt:''
   }
@@ -782,36 +968,46 @@ async function mockPass(bookingId) {
 // ── END MOCK MODE ─────────────────────────────────────────
 
 let allJobs = [], currentFilter = 'all', pendingClaimId = null;
-// Jobs this notary already claimed this calendar month (0-indexed for cap logic)
-let claimedThisMonth = 0;
+// RTCN fees accumulated this calendar month in DOLLARS — cap = $150.
+// Tracked in dollars NOT job count. A mix of $15 and $25 jobs means
+// cap can hit at 6 jobs (all Bedside/Closing) or 10 jobs (all Second/Minute).
+let rtcnFeesThisMonth = 0;
+let claimedThisMonth  = 0; // job count — for display only
 
 // ── EARNINGS ENGINE ───────────────────────────────────────
-// Base: 50/50 split. State fee: notary keeps 100%. Travel: notary keeps 100%.
-// Surcharges: 50/50. Add-ons: 50/50.
-// Dispatch fee: $15 flat for jobs 1-10 this month. $0 once cap ($150) is reached.
-// Deposit: RTCN keeps entirely — never counted in notary earnings.
+// RTCN Fee = half of SERVICE deposit, capped at half of base fee.
+//   Second Hand / Minute Hand: half of $30 deposit = $15 (= half of $30 base) → $15
+//   Bedside Clock: half of $50 deposit = $25 (< half of $75 base $37.50) → $25
+//   Closing Table: half of $50 deposit = $25 (< half of $150 base $75) → $25
+// Long distance travel deposit ($75) excluded — use service deposit only.
+// Cap: $150 cumulative RTCN fee DOLLARS per calendar month. NOT job count.
+// State fee, travel, add-ons, surcharges — notary keeps 100%.
 function calcEarnings(j) {
-  const base        = parseFloat(j.baseFee)        || 0;
-  const stateFee    = parseFloat(j.stateFee)        || 10;
+  const base        = parseFloat(j.baseFee)         || 0;
+  const stateFee    = parseFloat(j.stateFee)        || 0;
   const travel      = parseFloat(j.travelFee)       || 0;
   const addons      = parseFloat(j.addonsTotal)     || 0;
   const surcharges  = parseFloat(j.surchargesTotal) || 0;
-  const depositPaid = parseFloat(j.depositPaid)     || 0;
   const total       = parseFloat(j.total)           || 0;
+  const depositPaid = parseFloat(j.depositPaid)     || 0;
 
-  const collectAtDoor  = total - depositPaid;
-  const keepBase       = base * 0.50;
-  const keepStateFee   = stateFee;
-  const keepTravel     = travel;
-  const keepAddons     = addons * 0.50;
-  const keepSurcharges = surcharges * 0.50;
-  const capReached     = claimedThisMonth >= 10;
-  const dispatchFee    = capReached ? 0 : 15;
-  const gross          = keepBase + keepStateFee + keepTravel + keepAddons + keepSurcharges;
-  const net            = Math.max(0, gross - dispatchFee);
+  const collectAtDoor = total - depositPaid;
 
-  return { collectAtDoor, keepBase, keepStateFee, keepTravel, keepAddons,
-           keepSurcharges, dispatchFee, capReached, gross, net };
+  // RTCN fee: half service deposit, capped at half base
+  const serviceDeposit = base >= 75 ? 50 : 30;
+  const rtcnFeeBase    = Math.min(serviceDeposit * 0.50, base * 0.50);
+
+  // Cap check in DOLLARS — not job count
+  const capReached     = rtcnFeesThisMonth >= 150;
+  const rtcnFee        = capReached ? 0 : rtcnFeeBase;
+
+  // Notary keeps everything — only RTCN fee comes out
+  const gross = base + stateFee + travel + addons + surcharges;
+  const net   = Math.max(0, gross - rtcnFee);
+
+  return { collectAtDoor, gross, net,
+           rtcnFee, rtcnFeeBase, capReached, serviceDeposit,
+           base, stateFee, travel, addons, surcharges };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -840,6 +1036,11 @@ async function loadJobs() {
     }
     if (data.error) { showToast(data.error, 'error'); return; }
     allJobs = data.jobs || [];
+    // Wire month totals from Apps Script response (live mode)
+    if (!MOCK_MODE) {
+      claimedThisMonth  = data.claimedThisMonth  || 0;
+      rtcnFeesThisMonth = data.rtcnFeesThisMonth || 0;
+    }
     updateStats();
     render();
   } catch {
@@ -864,11 +1065,14 @@ function updateStats() {
   // In live mode Apps Script should send claimedThisMonth in the response.
   // In mock mode, count claimed jobs assigned to this notary name.
   if (MOCK_MODE) {
-    const thisMonth = new Date().getMonth();
-    const thisYear  = new Date().getFullYear();
-    claimedThisMonth = MOCK_STATE.filter(j =>
-      j.status === 'CLAIMED' && j.notaryName === NOTARY_NAME
-    ).length;
+    // Calculate rtcnFeesThisMonth from MOCK_STATE claimed jobs
+    const claimed = MOCK_STATE.filter(j => j.status === 'CLAIMED' && j.notaryName === NOTARY_NAME);
+    claimedThisMonth = claimed.length;
+    rtcnFeesThisMonth = claimed.reduce((sum, j) => {
+      const b = parseFloat(j.baseFee) || 0;
+      const sd = b >= 75 ? 50 : 30;
+      return sum + Math.min(sd * 0.5, b * 0.5);
+    }, 0);
   }
 }
 
@@ -906,8 +1110,8 @@ function card(j) {
   const stripe = j.status === 'CLAIMED' ? 'st-claimed' : j.status === 'PASSED' ? 'st-passed' : 'st-pending';
   const pill   = j.status === 'PENDING' ? 'p-pending' : j.status === 'CLAIMED' ? 'p-claimed' : 'p-passed';
   const miles  = parseFloat(j.miles) || 0;
-  const zc     = miles <= 10 ? 'z-local' : miles <= 20 ? 'z-extended' : 'z-long';
-  const zl     = miles <= 10 ? 'Local Zone' : miles <= 20 ? 'Extended Zone' : 'Long Distance';
+  const zc     = miles <= 5 ? 'z-local' : miles <= 20 ? 'z-extended' : 'z-long';
+  const zl     = miles <= 5 ? 'Free Zone (≤5 mi)' : miles <= 20 ? 'Standard Zone' : 'Long Distance';
 
   const addons = (j.addons||[]).length
     ? j.addons.map(a=>`<div class="extra-item"><span class="extra-dot"></span>${h(a)}</div>`).join('')
@@ -922,49 +1126,66 @@ function card(j) {
 
   // ── EARNINGS PANEL (pending jobs only) ──
   const earnPanel = j.status === 'PENDING' ? (() => {
-    const e = calcEarnings(j);
-    const dispClass = e.dispatchFee > 0 ? 'neg' : 'zero';
-    const capBadge  = e.capReached
-      ? `<span class="earn-cap-badge">Cap reached — $0 fee</span>` : '';
+    const e        = calcEarnings(j);
+    const capUsed  = Math.min(rtcnFeesThisMonth, 150);
+    const capAfter = Math.min(capUsed + e.rtcnFee, 150);
+    const capPct   = Math.min(Math.round((capAfter / 150) * 100), 100);
+    const capLabel = e.capReached
+      ? 'Cap reached — no RTCN fee on remaining jobs this month'
+      : `$${fmt(capUsed)} used · $${fmt(e.rtcnFee)} this job · $${fmt(150 - capAfter)} remaining`;
+
     return `
     <div class="earn-panel">
       <div class="earn-header"><span class="earn-header-dot"></span>Your Earnings If You Claim This Job</div>
-      <div class="earn-grid">
-        <div class="earn-item">
-          <span class="earn-k">Base (your 50%)</span>
-          <span class="earn-v">$${fmt(e.keepBase)}</span>
+
+      <div class="earn-job-total">
+        <div>
+          <span class="earn-jt-label">Total Job Value</span>
+          <span class="earn-jt-val">$${fmt(e.gross)}</span>
         </div>
-        <div class="earn-item">
-          <span class="earn-k">State fee (yours)</span>
-          <span class="earn-v">$${fmt(e.keepStateFee)}</span>
+        <span class="earn-jt-sub">How it splits →</span>
+      </div>
+
+      <div class="earn-splits">
+        <div class="earn-split-row">
+          <div class="earn-split-label">
+            You earn
+            <span>All fees yours — state, travel, add-ons, surcharges</span>
+          </div>
+          <span class="earn-split-val you">$${fmt(e.net)}</span>
         </div>
-        <div class="earn-item">
-          <span class="earn-k">Travel (yours)</span>
-          <span class="earn-v">$${fmt(e.keepTravel)}</span>
+        <div class="earn-split-row">
+          <div class="earn-split-label">
+            RTCN fee
+            <span>${e.capReached ? 'Cap reached — $0 this job' : `½ of $${e.serviceDeposit} service deposit`}</span>
+          </div>
+          <span class="earn-split-val rtcn">${e.rtcnFee > 0 ? '$'+fmt(e.rtcnFee) : '$0.00'}</span>
         </div>
-        <div class="earn-item">
-          <span class="earn-k">Add-ons (your 50%)</span>
-          <span class="earn-v">$${fmt(e.keepAddons)}</span>
-        </div>
-        <div class="earn-item">
-          <span class="earn-k">Surcharges (your 50%)</span>
-          <span class="earn-v">$${fmt(e.keepSurcharges)}</span>
-        </div>
-        <div class="earn-item">
-          <span class="earn-k">Dispatch fee</span>
-          <span class="earn-v ${dispClass}">${e.dispatchFee > 0 ? '-$'+fmt(e.dispatchFee) : '$0'}</span>
+        <div class="earn-split-row">
+          <div class="earn-split-label">
+            RTCN deposit
+            <span>Collected at booking via PayPal</span>
+          </div>
+          <span class="earn-split-val rtcn">$${fmt(j.depositPaid)}</span>
         </div>
       </div>
-      <div class="earn-divider"></div>
-      <div class="earn-total-row">
-        <div class="earn-total-left">
-          <span class="earn-total-label">You Take Home ${capBadge}</span>
-          <span class="earn-total-sub">Job #${claimedThisMonth + 1} this month${e.capReached ? ' — cap already hit, no dispatch fee' : ` — $${15 * (10 - claimedThisMonth)} left before cap`}</span>
+
+      <div class="earn-takehome">
+        <div class="earn-th-left">
+          <span class="earn-th-label">You Take Home${e.capReached ? ' — Cap Hit' : ''}</span>
+          <span class="earn-th-sub">Collect $${fmt(e.collectAtDoor)} at door · keep it all</span>
         </div>
-        <span class="earn-total-amount">$${fmt(e.net)}</span>
+        <span class="earn-th-amount">$${fmt(e.net)}</span>
       </div>
-      <div class="earn-collect-row">
-        You collect <strong>$${fmt(e.collectAtDoor)}</strong> at the door. RTCN already collected the <strong>$${fmt(j.depositPaid)}</strong> deposit.
+
+      <div class="cap-bar-wrap">
+        <div class="cap-bar-label">
+          <span>RTCN monthly cap</span>
+          <span><strong>${capLabel}</strong></span>
+        </div>
+        <div class="cap-bar-track">
+          <div class="cap-bar-fill" style="width:${capPct}%"></div>
+        </div>
       </div>
     </div>`;
   })() : '';
@@ -1003,24 +1224,37 @@ function card(j) {
       <div class="info-row"><span class="info-k">Name</span><span class="info-v">${h(j.clientName)}</span></div>
       <div class="info-row"><span class="info-k">Phone</span><span class="info-v"><a href="tel:${ea(j.clientPhone)}">${h(j.clientPhone)}</a></span></div>
       <div class="info-row"><span class="info-k">Email</span><span class="info-v" style="word-break:break-all"><a href="mailto:${ea(j.clientEmail)}">${h(j.clientEmail)}</a></span></div>
-    </div>
-    <div class="body-col">
+      <div style="height:1px;background:var(--cream-dark);margin:10px 0;"></div>
       <div class="col-head">Location</div>
       <div class="info-row"><span class="info-k">Address</span><span class="info-v">${h(j.address)}</span></div>
       <div class="info-row"><span class="info-k">Distance</span><span class="info-v">${miles} mi<br><span class="zone-tag ${zc}">${zl}</span></span></div>
     </div>
     <div class="body-col">
       <div class="col-head">Order Total</div>
-      <div class="fin-grid">
-        <div class="fin-item"><span class="fin-k">Base fee</span><span class="fin-v">$${fmt(j.baseFee)}</span></div>
-        <div class="fin-item"><span class="fin-k">Travel fee</span><span class="fin-v">$${fmt(j.travelFee)}</span></div>
-        <div class="fin-item"><span class="fin-k">Add-ons</span><span class="fin-v">$${fmt(j.addonsTotal)}</span></div>
-        <div class="fin-item"><span class="fin-k">Surcharges</span><span class="fin-v">$${fmt(j.surchargesTotal)}</span></div>
-        <div class="fin-rule"></div>
-        <div class="fin-item"><span class="fin-k">Client total</span><span class="fin-v f-total">$${fmt(j.total)}</span></div>
-        <div class="fin-item"><span class="fin-k">Deposit (RTCN)</span><span class="fin-v" style="color:var(--text-muted)">$${fmt(j.depositPaid)}</span></div>
-        <div class="fin-item" style="grid-column:1/-1"><span class="fin-k">You collect at door</span><span class="fin-v f-due">$${fmt(j.dueAtSigning)}</span></div>
+      <span class="receipt-cat">Service</span>
+      <div class="receipt-row"><span>${h(j.serviceType)}</span><span>$${fmt(j.baseFee)}</span></div>
+      <div class="receipt-row"><span>TX State fee</span><span>$${fmt(j.stateFee)}</span></div>
+      <span class="receipt-cat">Add-Ons</span>
+      <div class="receipt-row ${parseFloat(j.addonsTotal) > 0 ? '' : 'receipt-none'}">
+        <span>${parseFloat(j.addonsTotal) > 0 ? 'Add-ons included' : 'None'}</span>
+        <span>${parseFloat(j.addonsTotal) > 0 ? '$'+fmt(j.addonsTotal) : '—'}</span>
       </div>
+      <span class="receipt-cat">Surcharges</span>
+      <div class="receipt-row ${parseFloat(j.surchargesTotal) > 0 ? '' : 'receipt-none'}">
+        <span>${parseFloat(j.surchargesTotal) > 0 ? 'Surcharges applied' : 'None'}</span>
+        <span>${parseFloat(j.surchargesTotal) > 0 ? '$'+fmt(j.surchargesTotal) : '—'}</span>
+      </div>
+      <span class="receipt-cat">Travel</span>
+      <div class="receipt-row">
+        <span>${miles <= 5 ? 'Local zone' : miles > 20 ? miles+' mi · $75 min or mileage' : miles+' mi @ $0.725/mi'}</span>
+        <span style="color:${parseFloat(j.travelFee) === 0 ? 'var(--success)' : 'inherit'}">${parseFloat(j.travelFee) === 0 ? 'Free' : '$'+fmt(j.travelFee)}</span>
+      </div>
+      <div class="receipt-total"><span>Client Total</span><span>$${fmt(j.total)}</span></div>
+      <div class="receipt-deposit"><span>Deposit (RTCN collected)</span><span>— $${fmt(j.depositPaid)}</span></div>
+      <div class="receipt-due"><span>You collect at door</span><span>$${fmt(j.dueAtSigning)}</span></div>
+    </div>
+    <div class="body-col">
+      ${earnPanel}
     </div>
   </div>
   <div class="extras-row">
@@ -1033,7 +1267,6 @@ function card(j) {
       <div class="extras-list">${surcharges}</div>
     </div>
   </div>
-  ${earnPanel}
   ${noteStrip}
   <div class="card-foot">${footLeft}${footRight}</div>
 </div>`;
