@@ -788,6 +788,141 @@ body {
   color: var(--danger);
   padding-top: 3px;
 }
+
+/* ── EARNINGS TRACKER ── */
+.tracker {
+  background: var(--white);
+  border: 1px solid var(--cream-border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.tracker-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--navy);
+  cursor: pointer;
+  user-select: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+.tracker-toggle-left { display: flex; align-items: center; gap: 10px; }
+.tracker-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  display: block;
+}
+.tracker-subtitle { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 1px; display: block; }
+.tracker-chev { font-size: 12px; color: rgba(201,168,76,0.7); transition: transform 0.2s; }
+.tracker-chev.open { transform: rotate(180deg); }
+
+/* summary bar */
+.tracker-summary {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 2fr;
+  border-bottom: 1px solid var(--cream-border);
+  background: var(--cream);
+}
+.ts-stat {
+  padding: 12px 14px;
+  border-right: 1px solid var(--cream-border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ts-stat:last-child { border-right: none; }
+.ts-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+.ts-val { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; color: var(--text-navy); line-height: 1; }
+.ts-val.green { color: var(--success); }
+.ts-val.gold  { color: var(--gold-dark); }
+.ts-sub { font-size: 10px; color: var(--text-muted); font-style: italic; }
+.ts-cap { padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; }
+.ts-cap-top { display: flex; justify-content: space-between; }
+.ts-cap-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+.ts-cap-nums { font-size: 11px; font-weight: 700; color: var(--text-navy); }
+.ts-cap-nums span { color: var(--text-muted); font-weight: 400; }
+.ts-cap-track { height: 8px; background: var(--cream-border); border-radius: 4px; overflow: hidden; }
+.ts-cap-fill  { height: 8px; background: var(--gold); border-radius: 4px; transition: width 0.4s; }
+.ts-cap-note  { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-muted); }
+.ts-cap-note .free { color: var(--success); font-weight: 700; }
+
+/* month sections */
+.month-section { border-bottom: 1px solid var(--cream-border); }
+.month-section:last-child { border-bottom: none; }
+.month-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 18px;
+  cursor: pointer;
+  background: var(--white);
+  user-select: none;
+  gap: 12px;
+}
+.month-hdr:hover { background: var(--cream); }
+.month-hdr.pinned { background: rgba(13,26,46,0.03); cursor: default; }
+.month-hdr-left { display: flex; align-items: center; gap: 10px; }
+.month-label { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: var(--text-navy); }
+.month-badge { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; border: 1px solid; }
+.badge-current { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-bd); }
+.badge-closed  { background: var(--cream-dark); color: var(--text-muted); border-color: var(--cream-border); }
+.month-hdr-right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+.mhs { text-align: right; }
+.mhs-lbl { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; display: block; }
+.mhs-val { font-size: 13px; font-weight: 700; color: var(--text-navy); }
+.mhs-val.green { color: var(--success); }
+.mhs-val.muted { color: var(--text-muted); }
+.month-chev { font-size: 11px; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; }
+.month-chev.open { transform: rotate(90deg); }
+.month-body { padding: 4px 18px 14px; }
+.earn-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
+.earn-table th {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold-dark); padding: 6px 8px; border-bottom: 2px solid var(--cream-border); text-align: left;
+}
+.earn-table th:nth-child(n+3), .earn-table td:nth-child(n+3) { text-align: right; }
+.earn-table td { padding: 7px 8px; border-bottom: 1px solid var(--cream-dark); color: var(--text-mid); }
+.earn-table tr:last-child td { border-bottom: none; }
+.earn-table tr.totals-row td {
+  font-weight: 700; color: var(--text-navy); border-top: 2px solid var(--cream-border);
+  border-bottom: none; background: var(--cream); padding: 8px;
+}
+.earn-table td.net { color: var(--success); font-weight: 700; }
+.earn-table td.rtcn { color: var(--text-muted); }
+.ns-tag { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: var(--warn-bg); color: var(--warn-text); border: 1px solid var(--warn-bd); border-radius: 3px; padding: 1px 5px; margin-left: 4px; }
+
+/* annual row */
+.annual-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px; background: var(--navy); gap: 12px; flex-wrap: wrap;
+}
+.annual-left { display: flex; flex-direction: column; gap: 2px; }
+.annual-label { font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+.annual-sub { font-size: 10px; color: rgba(255,255,255,0.4); }
+.annual-stats { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.annual-stat { text-align: right; }
+.as-lbl { font-size: 9px; color: rgba(255,255,255,0.45); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+.as-val { font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700; }
+.as-val.green { color: #4fc882; }
+.as-val.gold  { color: rgba(201,168,76,0.8); }
+.as-val.white { color: #fff; }
+.nec-badge { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); border-radius: 3px; padding: 4px 10px; white-space: nowrap; }
+
+@media (max-width: 640px) {
+  .tracker-summary { grid-template-columns: 1fr 1fr; }
+  .ts-stat:nth-child(n+3) { border-top: 1px solid var(--cream-border); }
+  .ts-cap { grid-column: 1 / -1; border-top: 1px solid var(--cream-border); }
+  .month-hdr-right { gap: 10px; }
+  .mhs:nth-child(n+3) { display: none; }
+  .annual-stats { gap: 12px; }
+}
 </style>
 </head>
 <body>
@@ -841,6 +976,23 @@ body {
 
 <!-- MAIN -->
 <main class="main">
+  <!-- EARNINGS TRACKER -->
+  <div class="tracker" id="earningsTracker">
+    <button class="tracker-toggle" onclick="toggleTracker()">
+      <div class="tracker-toggle-left">
+        <div>
+          <span class="tracker-title">Your Earnings</span>
+          <span class="tracker-subtitle" id="trackerSubtitle">Loading...</span>
+        </div>
+      </div>
+      <span class="tracker-chev open" id="trackerChev">▼</span>
+    </button>
+    <div id="trackerBody">
+      <div id="trackerSummary"><!-- filled by renderTracker() --></div>
+      <div id="trackerMonths"><!-- filled by renderTracker() --></div>
+    </div>
+  </div>
+
   <div class="stats-row">
     <div class="stat-card"><span class="stat-num" id="sPending">—</span><span class="stat-lbl">Pending</span></div>
     <div class="stat-card"><span class="stat-num" id="sClaimed">—</span><span class="stat-lbl">Claimed</span></div>
@@ -892,8 +1044,8 @@ const MOCK_JOBS = [
     dateTime:'Sat, Mar 21, 2026 at 10:30 AM',
     serviceType:'Second Hand — Single Notarization',
     addons:['Single-sided print (5 pages)'], surcharges:[],
-    baseFee:20, stateFee:10, travelFee:0, addonsTotal:5, surchargesTotal:0,
-    total:35, depositPaid:30, dueAtSigning:5,
+    baseFee:30, stateFee:10, travelFee:0, addonsTotal:5, surchargesTotal:0,
+    total:45, depositPaid:30, dueAtSigning:15,
     noteToNotary:'Client is elderly. Please allow extra time. Documents are loan modification paperwork.',
     notaryName:'', claimedAt:''
   },
@@ -922,7 +1074,7 @@ const MOCK_JOBS = [
     baseFee:75, stateFee:0, travelFee:13.05, addonsTotal:20, surchargesTotal:0,
     total:108.05, depositPaid:50, dueAtSigning:58.05,
     noteToNotary:'Patient at Baylor Scott & White. Check in at front desk, room 214.',
-    notaryName:'Maria Torres', claimedAt:'Mar 18, 9:12 AM'
+    notaryName:'Sharee Westlund', claimedAt:'Mar 18, 9:12 AM'
   },
   {
     // Closing Table, long distance, Rush Hour, witness — tests cap scenario
@@ -1042,6 +1194,7 @@ async function loadJobs() {
       rtcnFeesThisMonth = data.rtcnFeesThisMonth || 0;
     }
     updateStats();
+    renderTracker();
     render();
   } catch {
     showToast('Could not connect. Check your link.', 'error');
@@ -1074,6 +1227,146 @@ function updateStats() {
       return sum + Math.min(sd * 0.5, b * 0.5);
     }, 0);
   }
+}
+
+
+// ── EARNINGS TRACKER ──────────────────────────────────────
+let trackerOpen  = true;
+let openMonths   = {};
+
+function buildMockEarnings() {
+  const month = new Date().toLocaleString('en-US', { month:'long', year:'numeric', timeZone:'America/Chicago' });
+  const year  = String(new Date().getFullYear());
+  const claimed = MOCK_STATE.filter(j => j.status === 'CLAIMED');
+  const currentJobs = claimed.map(j => {
+    const base  = parseFloat(j.baseFee) || 0;
+    const sd    = base >= 75 ? 50 : 30;
+    const fee   = Math.min(sd * 0.5, base * 0.5);
+    const gross = base + (parseFloat(j.stateFee)||0) + (parseFloat(j.travelFee)||0) +
+                  (parseFloat(j.addonsTotal)||0) + (parseFloat(j.surchargesTotal)||0);
+    return { bookingId:j.bookingId, serviceType:j.serviceType, date:j.date,
+             status:'COMPLETED', atDoor:parseFloat(j.dueAtSigning)||0,
+             rtcnFee:fee, net:gross - fee };
+  });
+  const curAtDoor = currentJobs.reduce((s,j) => s + j.atDoor, 0);
+  const curRtcn   = currentJobs.reduce((s,j) => s + j.rtcnFee, 0);
+  const curNet    = currentJobs.reduce((s,j) => s + j.net, 0);
+  const archived  = [
+    { label:'February 2026', jobs:7, atDoor:612.40, rtcnFees:110.00, net:502.40 },
+    { label:'January 2026',  jobs:5, atDoor:387.20, rtcnFees:90.00,  net:297.20 }
+  ];
+  const ytdAtDoor = curAtDoor + archived.reduce((s,m) => s + m.atDoor,   0);
+  const ytdRtcn   = curRtcn   + archived.reduce((s,m) => s + m.rtcnFees, 0);
+  const ytdNet    = curNet    + archived.reduce((s,m) => s + m.net,      0);
+  const ytdJobs   = currentJobs.length + archived.reduce((s,m) => s + m.jobs, 0);
+  return { currentMonth:month, year, currentJobs, curAtDoor, curRtcn, curNet,
+           archived, ytdAtDoor, ytdRtcn, ytdNet, ytdJobs };
+}
+
+function renderTracker() {
+  const d = buildMockEarnings();
+  document.getElementById('trackerSubtitle').textContent =
+    `${d.currentMonth} · ${d.currentJobs.length} job${d.currentJobs.length !== 1 ? 's' : ''} · $${fmt(d.curNet)} net`;
+
+  const capAmt = Math.min(rtcnFeesThisMonth, 150);
+  const capPct = Math.min(Math.round((capAmt / 150) * 100), 100);
+  const capLeft = Math.max(0, 150 - rtcnFeesThisMonth);
+
+  document.getElementById('trackerSummary').innerHTML = `
+    <div class="tracker-summary">
+      <div class="ts-stat"><span class="ts-lbl">Collected at Door</span><span class="ts-val">$${fmt(d.curAtDoor)}</span><span class="ts-sub">gross this month</span></div>
+      <div class="ts-stat"><span class="ts-lbl">You Have Earned</span><span class="ts-val green">$${fmt(d.curNet)}</span><span class="ts-sub">net after RTCN fee</span></div>
+      <div class="ts-stat"><span class="ts-lbl">RTCN Fees</span><span class="ts-val gold">$${fmt(d.curRtcn)}</span><span class="ts-sub">toward $150 cap</span></div>
+      <div class="ts-stat"><span class="ts-lbl">Jobs This Month</span><span class="ts-val">${d.currentJobs.length}</span><span class="ts-sub">completed</span></div>
+      <div class="ts-stat"><span class="ts-lbl">Annual Net</span><span class="ts-val green">$${fmt(d.ytdNet)}</span><span class="ts-sub">YTD ${d.year}</span></div>
+      <div class="ts-cap">
+        <div class="ts-cap-top"><span class="ts-cap-lbl">Monthly Cap Progress</span><span class="ts-cap-nums">$${fmt(capAmt)} <span>of $150</span></span></div>
+        <div class="ts-cap-track"><div class="ts-cap-fill" style="width:${capPct}%"></div></div>
+        <div class="ts-cap-note"><span>$${fmt(capLeft)} remaining</span><span class="free">${capAmt >= 150 ? 'Cap hit — all jobs free!' : 'All jobs fee-free after $150'}</span></div>
+      </div>
+    </div>`;
+
+  let html = '';
+
+  // Current month pinned
+  const rows = d.currentJobs.length === 0
+    ? `<tr><td colspan="6" style="text-align:center;color:var(--text-muted);font-style:italic;padding:12px;">No completed jobs this month yet.</td></tr>`
+    : d.currentJobs.map((j,i) => `<tr style="background:${i%2===0?'var(--white)':'var(--cream)'}">
+        <td>${h(j.bookingId)}</td><td>${h(j.serviceType.split('—')[0].trim())}</td><td>${h(j.date)}</td>
+        <td>$${fmt(j.atDoor)}</td><td class="rtcn">$${fmt(j.rtcnFee)}</td><td class="net">$${fmt(j.net)}</td>
+      </tr>`).join('');
+  const totRow = d.currentJobs.length > 0
+    ? `<tr class="totals-row"><td colspan="3">${h(d.currentMonth)} — ${d.currentJobs.length} jobs</td><td>$${fmt(d.curAtDoor)}</td><td class="rtcn">$${fmt(d.curRtcn)}</td><td class="net">$${fmt(d.curNet)}</td></tr>` : '';
+
+  html += `<div class="month-section">
+    <div class="month-hdr pinned">
+      <div class="month-hdr-left"><span class="month-label">${h(d.currentMonth)}</span><span class="month-badge badge-current">Current</span></div>
+      <div class="month-hdr-right">
+        <div class="mhs"><span class="mhs-lbl">Jobs</span><span class="mhs-val">${d.currentJobs.length}</span></div>
+        <div class="mhs"><span class="mhs-lbl">At Door</span><span class="mhs-val">$${fmt(d.curAtDoor)}</span></div>
+        <div class="mhs"><span class="mhs-lbl">RTCN Fees</span><span class="mhs-val muted">$${fmt(d.curRtcn)}</span></div>
+        <div class="mhs"><span class="mhs-lbl">Net</span><span class="mhs-val green">$${fmt(d.curNet)}</span></div>
+      </div>
+    </div>
+    <div class="month-body">
+      <table class="earn-table">
+        <thead><tr><th>Booking ID</th><th>Service</th><th>Date</th><th>At Door</th><th>RTCN Fee</th><th>You Net</th></tr></thead>
+        <tbody>${rows}${totRow}</tbody>
+      </table>
+    </div>
+  </div>`;
+
+  d.archived.forEach((m, idx) => {
+    const key  = 'arch_' + idx;
+    const open = openMonths[key];
+    html += `<div class="month-section">
+      <div class="month-hdr" onclick="toggleMonth('${key}')">
+        <div class="month-hdr-left"><span class="month-label">${h(m.label)}</span><span class="month-badge badge-closed">Closed</span></div>
+        <div class="month-hdr-right">
+          <div class="mhs"><span class="mhs-lbl">Jobs</span><span class="mhs-val">${m.jobs}</span></div>
+          <div class="mhs"><span class="mhs-lbl">At Door</span><span class="mhs-val">$${fmt(m.atDoor)}</span></div>
+          <div class="mhs"><span class="mhs-lbl">RTCN Fees</span><span class="mhs-val muted">$${fmt(m.rtcnFees)}</span></div>
+          <div class="mhs"><span class="mhs-lbl">Net</span><span class="mhs-val green">$${fmt(m.net)}</span></div>
+          <span class="month-chev ${open?'open':''}" id="chev_${key}">▶</span>
+        </div>
+      </div>
+      <div id="body_${key}" style="display:${open?'block':'none'};" class="month-body">
+        <p style="font-size:12px;color:var(--text-muted);padding:8px 0;">${m.jobs} jobs · $${fmt(m.atDoor)} at door · $${fmt(m.rtcnFees)} RTCN fees · $${fmt(m.net)} net take-home</p>
+      </div>
+    </div>`;
+  });
+
+  const needs1099 = d.ytdNet >= 600;
+  html += `<div class="annual-row">
+    <div class="annual-left">
+      <span class="annual-label">${h(d.year)} Annual Total</span>
+      <span class="annual-sub">${d.ytdJobs} jobs completed year to date</span>
+    </div>
+    <div class="annual-stats">
+      <div class="annual-stat"><span class="as-lbl">At Door</span><span class="as-val white">$${fmt(d.ytdAtDoor)}</span></div>
+      <div class="annual-stat"><span class="as-lbl">RTCN Fees</span><span class="as-val gold">$${fmt(d.ytdRtcn)}</span></div>
+      <div class="annual-stat"><span class="as-lbl">You Earned</span><span class="as-val green">$${fmt(d.ytdNet)}</span></div>
+      <span class="nec-badge">${needs1099 ? '⚠ 1099-NEC Required' : 'Under $600 threshold'}</span>
+    </div>
+  </div>`;
+
+  document.getElementById('trackerMonths').innerHTML = html;
+}
+
+function toggleTracker() {
+  trackerOpen = !trackerOpen;
+  document.getElementById('trackerBody').style.display = trackerOpen ? 'block' : 'none';
+  const chev = document.getElementById('trackerChev');
+  chev.textContent = trackerOpen ? '▼' : '▶';
+  chev.classList.toggle('open', trackerOpen);
+}
+
+function toggleMonth(key) {
+  openMonths[key] = !openMonths[key];
+  const body = document.getElementById('body_' + key);
+  const chev = document.getElementById('chev_' + key);
+  if (body) body.style.display = openMonths[key] ? 'block' : 'none';
+  if (chev) chev.classList.toggle('open', openMonths[key]);
 }
 
 function setFilter(f, el) {
