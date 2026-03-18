@@ -1611,9 +1611,8 @@ async function submitClaim() {
       data = await mockClaim(pendingClaimId, NOTARY_NAME);
     } else {
       const payload = { action:'claimJob', bookingId:pendingClaimId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN };
-      const res = await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify(payload))}`, {redirect:'follow'});
-      const text = await res.text();
-      try { data = JSON.parse(text); } catch(e) { data = { success: true }; }
+      await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
+      data = { success: true };
     }
     closeModal();
     if (data.success) { showToast(`Job ${pendingClaimId} claimed! ${MOCK_MODE ? '(Mock — no emails sent)' : 'Client confirmation sent.'}`, 'success'); await loadJobs(); }
@@ -1628,9 +1627,8 @@ async function passJob(bookingId) {
       data = await mockPass(bookingId);
     } else {
       const payload = { action:'passJob', bookingId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN };
-      const res = await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify(payload))}`, {redirect:'follow'});
-      const text2 = await res.text();
-      try { data = JSON.parse(text2); } catch(e) { data = { success: true }; }
+      await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(payload) });
+      data = { success: true };
     }
     if (data.success) { showToast(`Passed on ${bookingId}.`); await loadJobs(); }
     else showToast(data.error || 'Could not pass.', 'error');
