@@ -1610,8 +1610,8 @@ async function submitClaim() {
     if (MOCK_MODE) {
       data = await mockClaim(pendingClaimId, NOTARY_NAME);
     } else {
-      const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'claimJob', bookingId:pendingClaimId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN }) });
+      const payload = { action:'claimJob', bookingId:pendingClaimId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN };
+      const res = await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify(payload))}`);
       data = await res.json();
     }
     closeModal();
@@ -1626,8 +1626,8 @@ async function passJob(bookingId) {
     if (MOCK_MODE) {
       data = await mockPass(bookingId);
     } else {
-      const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'passJob', bookingId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN }) });
+      const payload = { action:'passJob', bookingId, notaryName:NOTARY_NAME, token:NOTARY_TOKEN };
+      const res = await fetch(`${SCRIPT_URL}?data=${encodeURIComponent(JSON.stringify(payload))}`);
       data = await res.json();
     }
     if (data.success) { showToast(`Passed on ${bookingId}.`); await loadJobs(); }
