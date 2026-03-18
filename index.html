@@ -7,18 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy:        #0D1A2E;
-  --navy-mid:    #152540;
+  --navy:        #0e1b3a;
+  --navy-mid:    #1a2d5a;
   --navy-light:  #1e3560;
-  --gold:        #C9A84C;
-  --gold-light:  #dfc070;
+  --gold:        #c9a84c;
+  --gold-light:  #e8c96a;
   --gold-dark:   #9a7c30;
-  --gold-pale:   #f0e4c0;
-  --cream:       #F5F0E8;
-  --cream-dark:  #EDE5D8;
-  --cream-border:#D8CFBE;
-  --white:       #FFFFFF;
-  --text-navy:   #0D1A2E;
+  --gold-pale:   #f0dfa0;
+  --cream:       #f5f0e8;
+  --cream-dark:  #ede5d8;
+  --cream-border:#d8cfbe;
+  --white:       #ffffff;
+  --text-navy:   #0e1b3a;
   --text-mid:    #3a4f6a;
   --text-muted:  #7a8fa8;
   --success:     #1d6b3a;
@@ -826,7 +826,7 @@ body {
 /* summary bar */
 .tracker-summary {
   display: grid;
-  grid-template-columns: repeat(6, 1fr) 2fr;
+  grid-template-columns: repeat(5, 1fr) 2fr;
   border-bottom: 1px solid var(--cream-border);
   background: var(--cream);
 }
@@ -1283,7 +1283,6 @@ function renderTracker() {
     <div class="tracker-summary">
       <div class="ts-stat"><span class="ts-lbl">Collected at Door</span><span class="ts-val">$${fmt(d.curAtDoor)}</span><span class="ts-sub">gross this month</span></div>
       <div class="ts-stat"><span class="ts-lbl">You Have Earned</span><span class="ts-val green">$${fmt(d.curNet)}</span><span class="ts-sub">net after RTCN fee</span></div>
-      <div class="ts-stat"><span class="ts-lbl">RTCN Fees</span><span class="ts-val gold">$${fmt(d.curRtcn)}</span><span class="ts-sub">toward $150 cap</span></div>
       <div class="ts-stat"><span class="ts-lbl">Jobs This Month</span><span class="ts-val">${d.currentJobs.length}</span><span class="ts-sub">completed</span></div>
       <div class="ts-stat"><span class="ts-lbl">RTCN Collected</span><span class="ts-val gold">$${fmt(rtcnCollected)}</span><span class="ts-sub">fees retained by RTCN</span></div>
       <div class="ts-stat"><span class="ts-lbl">RTCN Due To Notary</span><span class="ts-val green">$${fmt(rtcnDueNotary)}</span><span class="ts-sub">deposits minus fees owed</span></div>
